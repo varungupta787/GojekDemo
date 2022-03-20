@@ -1,5 +1,10 @@
 package com.gojek.demo.data
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import android.net.wifi.WifiManager
+
 object NetworkUtils {
     const val BASE_URL = "https://api.github.com/"
     const val REPO_URL = "repos/octocat/hello-world"
@@ -18,4 +23,17 @@ object NetworkUtils {
     const val session_expired_err_message = "Your session has expired, please login again."
     const val unauthorized_err_message = "Access Denied. User is unauthorized."
     const val bad_server_err_message = "Bad Server Error."
+
+
+    fun isNetworkAvailable(context: Context?): Boolean {
+
+        val connectManager: ConnectivityManager? = context?.applicationContext?.getApplicationContext()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val wifiManager: WifiManager? = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+        val netInfo: NetworkInfo? = connectManager?.activeNetworkInfo
+        if (netInfo?.isConnected?: false || wifiManager?.isWifiEnabled?:false) {
+            return true
+        }
+        return false
+    }
 }
