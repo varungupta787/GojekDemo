@@ -9,9 +9,9 @@ import com.gojek.demo.domain.models.ResponseResource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class RepositoryDataUsecase(var dispatcher:CoroutineDispatcher, var context: Context,
-                            var repository: RepositoryDataRepo,
-                            var database: RepositoryDatabase) : BaseUseCase(dispatcher, repository, database){
+class RepoDataUsecase(var dispatcher:CoroutineDispatcher, var context: Context,
+                      var repository: RepositoryDataRepo,
+                      var database: RepositoryDatabase) : BaseUseCase(dispatcher, repository, database){
 
     suspend fun getRepoData(onSuccess: (t: List<RepoItem>) -> Unit, onError: (t:String?) ->Unit) {
         withContext(dispatcher) {
