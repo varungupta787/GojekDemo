@@ -1,21 +1,20 @@
 package com.gojek.demo.domain.usercase
 
+import com.gojek.demo.data.local.database.RepositoryDatabase
 import com.gojek.demo.data.model.NetworkResponseWrapper
+import com.gojek.demo.data.model.RepoItem
+import com.gojek.demo.domain.RepositoryDataRepo
 import com.gojek.demo.domain.models.ResponseResource
+import kotlinx.coroutines.*
 
-class BaseUseCase<T> {
+open class BaseUseCase(var databaseDispatcher:CoroutineDispatcher,
+                       var repo: RepositoryDataRepo,
+                  var db: RepositoryDatabase
+) {
 
-    suspend fun <T:Any> parseNetworkResponse(networkResponse: NetworkResponseWrapper<T>) : ResponseResource<T> {
-        var responseResource : ResponseResource<T>
-        responseResource = when(networkResponse) {
-            is NetworkResponseWrapper.NetworkSuccess  ->  {
-                ResponseResource.success(networkResponse.data)
-            }
-            is  NetworkResponseWrapper.NetworkError -> {
-                ResponseResource.error(networkResponse.errorMsg)
-            }
-        }
-        return responseResource
-    }
-
+    fun saveToDatabase(repoDataList : List<RepoItem>) {
+       CoroutineScope(databaseDispatcher).launch{
+           db.repoItemDao().insertAllRepositoryItems(repoDataList)
+       }
+   }
 }
