@@ -95,7 +95,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun privideNetworkConnectionUtil(@ActivityContext context:Context) : NetworkConnectionUtil {
+    fun provideNetworkConnectionUtil(@ActivityContext context:Context) : NetworkConnectionUtil {
         return NetworkConnectionUtil(context)
     }
 }
