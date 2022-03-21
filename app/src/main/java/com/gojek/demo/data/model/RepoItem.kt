@@ -8,6 +8,7 @@ class RepoItem() : Parcelable{
     var forks_count: Int? = null
     var language: String? = null
     var watchers_count: String? = null
+    var html_url: String? = null
     var owner: Owner? = null
 
     constructor(parcel: Parcel) : this() {
@@ -15,6 +16,7 @@ class RepoItem() : Parcelable{
         forks_count = parcel.readValue(Int::class.java.classLoader) as? Int
         language = parcel.readString()
         watchers_count = parcel.readString()
+        html_url = parcel.readString()
     }
 
     override fun describeContents(): Int {

@@ -5,7 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.gojek.demo.R
+import com.gojek.demo.ui.viewmodel.RepoViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,6 +25,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [RepositoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class RepositoryFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -59,9 +68,37 @@ class RepositoryFragment : Fragment() {
     }
 
 
+    @Inject
+    lateinit var mViewModel : RepoViewModel
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+      initViews()
+      setListeners()
 
 
+    }
+
+    fun initViews() {
+
+    }
+
+    fun setListeners() {
+
+    }
+
+
+    fun setObservers() {
+
+    }
+
+    fun fetchRepoListData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mViewModel.getRepoListData().observe(viewLifecycleOwner, { it ->
+
+                })
+            }
+        }
     }
 }

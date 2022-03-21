@@ -6,7 +6,7 @@ import android.net.NetworkInfo
 import android.net.wifi.WifiManager
 import dagger.hilt.android.qualifiers.ActivityContext
 
-class NetworkConnectionUtil(@ActivityContext val context: Context?) {
+class NetworkConnectionUtil(val context: Context?) {
 
     fun isNetworkAvailable(): Boolean {
         context?.apply {

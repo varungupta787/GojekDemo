@@ -3,6 +3,7 @@ package com.gojek.demo.di
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
+import com.gojek.demo.data.NetworkConnectionUtil
 import com.gojek.demo.data.NetworkUtils
 import com.gojek.demo.data.local.database.DatabaseUtil
 import com.gojek.demo.data.local.database.RepositoryDatabase
@@ -16,11 +17,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -43,9 +46,23 @@ object NetworkModule {
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class MainDispatcher
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class IoDispatcher
+
     @Singleton
+    @IoDispatcher
     @Provides
-    fun provideIoDispatcher() = Dispatchers.IO
+    fun provideIoDispatcher() : CoroutineDispatcher = Dispatchers.IO
+
+    @Singleton
+    @MainDispatcher
+    @Provides
+    fun provideMainDispatcher() : CoroutineDispatcher= Dispatchers.Main
 
     @Singleton
     @Provides
@@ -60,7 +77,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRepoDataUsecase(
-        dispatcher: CoroutineDispatcher,
+        @IoDispatcher dispatcher: CoroutineDispatcher,
         repositoryDataRepo: RepositoryDataRepo,
         repositoryDatabase: RepositoryDatabase,
     ): RepoDataUsecase {
@@ -71,9 +88,15 @@ object AppModule {
     @Provides
     fun provideRepositoryRepoDataImpl(
         apiService: ApiService,
-        dispatcher: CoroutineDispatcher
+        @IoDispatcher dispatcher: CoroutineDispatcher
     ): RepositoryDataRepo {
         return RepositoryRepoDataImpl(apiService, dispatcher)
+    }
+
+    @Singleton
+    @Provides
+    fun privideNetworkConnectionUtil(@ActivityContext context:Context) : NetworkConnectionUtil {
+        return NetworkConnectionUtil(context)
     }
 }
 
