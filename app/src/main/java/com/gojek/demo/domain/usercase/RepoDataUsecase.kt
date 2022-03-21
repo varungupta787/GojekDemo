@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RepoDataUsecase (
+class RepoDataUsecase  @Inject constructor(
     @AppModule.IoDispatcher var dispatcher : CoroutineDispatcher = Dispatchers.IO,
     var repository: RepositoryDataRepo,
     var database: RepositoryDatabase,
@@ -29,7 +29,7 @@ class RepoDataUsecase (
                 when (responseData.status) {
                     ResponseResource.StatusType.SUCCESS -> {
                         val repoDataList = responseData.data as List<RepoItem>
-                        onSuccess(responseData.data as List<RepoItem>)
+                        onSuccess(repoDataList)
                         saveToDatabase(repoDataList)
                     }
 
@@ -38,9 +38,13 @@ class RepoDataUsecase (
                     }
                 }
             } else {
-                onSuccess(database.repoItemDao().getAllRepositoryItem())
+                getRepoDataFromDatabase(onSuccess)
             }
         }
+    }
+
+    fun getRepoDataFromDatabase(onSuccess: (t: List<RepoItem>) -> Unit) {
+        onSuccess(database.repoItemDao().getAllRepositoryItem())
     }
 
 }

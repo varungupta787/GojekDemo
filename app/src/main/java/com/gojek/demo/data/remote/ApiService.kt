@@ -9,5 +9,5 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET(NetworkUtils.REPO_URL)
-    suspend fun getRepoList(): Response<RepoItem>
+    suspend fun getRepoList(): Response<List<RepoItem>>
 }

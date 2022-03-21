@@ -2,13 +2,15 @@ package com.gojek.demo.domain.repository
 
 import com.gojek.demo.data.NetworkUtils
 import com.gojek.demo.data.model.NetworkResponseWrapper
+import com.gojek.demo.di.AppModule
 import com.gojek.demo.domain.models.ResponseResource
 import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Response
 import java.lang.Exception
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-open class BaseRepository(var networkDispatcher: CoroutineDispatcher) {
+open class BaseRepository @Inject constructor(@AppModule.IoDispatcher var networkDispatcher: CoroutineDispatcher) {
 
     suspend fun <T> doNetworkCall(networkCall: suspend () -> Response<T>): NetworkResponseWrapper<T> {
         val networkResponse: NetworkResponseWrapper<T>

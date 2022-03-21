@@ -11,8 +11,6 @@ object NetworkUtils {
     const val BASE_URL = "https://api.github.com/"
     const val REPO_URL = "repos/octocat/hello-world"
 
-    const val UNEXPECTED_ERR_MSG = "Unexpected Error"
-
     //Http Status Codes
     const val SESSION_EXPIRED = 401
     const val UNAUTHORIZED = 403

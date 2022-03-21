@@ -4,5 +4,5 @@ import com.gojek.demo.data.model.RepoItem
 import com.gojek.demo.domain.models.ResponseResource
 
 interface RepositoryDataRepo {
-    suspend fun getRepoData() : ResponseResource<RepoItem>
+    suspend fun getRepoData() : ResponseResource<List<RepoItem>>
 }
