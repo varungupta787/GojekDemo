@@ -5,10 +5,14 @@ import com.gojek.demo.data.model.RepoItem
 import com.gojek.demo.domain.usercase.RepoDataUsecase
 import com.gojek.demo.ui.SingleLiveEvent
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RepoViewModel(var mainDispatcher: CoroutineDispatcher,
-                    var repoUseCase: RepoDataUsecase) :
+class RepoViewModel @Inject constructor(
+    var mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    var repoUseCase: RepoDataUsecase
+) :
     BaseViewModel() {
     fun getRepoListData(): SingleLiveEvent<List<RepoItem>> {
         val dataEvent = SingleLiveEvent<List<RepoItem>>()

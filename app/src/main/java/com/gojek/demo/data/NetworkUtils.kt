@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
+import com.gojek.demo.ui.RepoApplication
+import dagger.hilt.android.qualifiers.ActivityContext
 
 object NetworkUtils {
     const val BASE_URL = "https://api.github.com/"
@@ -24,16 +26,4 @@ object NetworkUtils {
     const val unauthorized_err_message = "Access Denied. User is unauthorized."
     const val bad_server_err_message = "Bad Server Error."
 
-
-    fun isNetworkAvailable(context: Context?): Boolean {
-
-        val connectManager: ConnectivityManager? = context?.applicationContext?.getApplicationContext()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val wifiManager: WifiManager? = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-        val netInfo: NetworkInfo? = connectManager?.activeNetworkInfo
-        if (netInfo?.isConnected?: false || wifiManager?.isWifiEnabled?:false) {
-            return true
-        }
-        return false
-    }
 }
