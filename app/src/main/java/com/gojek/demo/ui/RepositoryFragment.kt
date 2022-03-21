@@ -4,12 +4,21 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.gojek.demo.R
+import com.gojek.demo.ui.adapter.RepoListAdapter
+import com.gojek.demo.ui.viewmodel.BaseViewModel
 import com.gojek.demo.ui.viewmodel.RepoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -69,34 +78,110 @@ class RepositoryFragment : Fragment() {
 
 
     @Inject
-    lateinit var mViewModel : RepoViewModel
+    lateinit var mViewModel: RepoViewModel
+    @Inject
+    lateinit var mRepoAdapter: RepoListAdapter
+
+    lateinit var mShimmerLayout: ShimmerFrameLayout
+    lateinit var mRepoRecyclerview: RecyclerView
+    lateinit var mErrorContainer: LinearLayout
+    lateinit var mRetryButton: AppCompatButton
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-      initViews()
-      setListeners()
-
-
+        initViews(view)
+        setListeners()
+        observeLoadingState()
+        // get the api data
+        fetchRepoListData()
     }
 
-    fun initViews() {
-
+    //Initialize the views
+    fun initViews(view: View) {
+        mShimmerLayout = view.findViewById(R.id.shimmer_layout)
+        mRepoRecyclerview = view.findViewById(R.id.repo_recyclerview)
+        mErrorContainer = view.findViewById(R.id.error_container)
+        mRetryButton = view.findViewById(R.id.retry_button)
     }
 
+    //set the list adapter
+    fun setAdapter() {
+        mRepoRecyclerview.run {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mRepoAdapter
+        }
+    }
+
+    //obser the loading state during and ater api call to handle the views
+    fun observeLoadingState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mViewModel.observeViewStateLiveData().observe(viewLifecycleOwner, { it ->
+                    when(it) {
+                        BaseViewModel.ViewStateType.SUCCESS -> {
+                            hideLoading(true)
+                        }
+                        BaseViewModel.ViewStateType.ERROR -> {
+                            hideLoading(false)
+                        }
+                        BaseViewModel.ViewStateType.LOADING -> {
+                            showLoading()
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+    //stop the shimmer animation
+    fun stopShimmerEffect() {
+        mShimmerLayout.stopShimmerAnimation()
+    }
+
+    //show the shimmer animation
+    fun showShimmerEffect() {
+        mShimmerLayout.startShimmerAnimation()
+    }
+
+    //show the loader
+    fun showLoading() {
+        showShimmerEffect()
+        mRepoRecyclerview.visibility = GONE
+        mRetryButton.visibility = GONE
+    }
+
+
+    //hide the loader
+    fun hideLoading(isSucces: Boolean) {
+        stopShimmerEffect()
+        if (isSucces) {
+            mRetryButton.visibility = GONE
+            mRepoRecyclerview.visibility = VISIBLE
+        } else {
+            mRetryButton.visibility = VISIBLE
+            mRepoRecyclerview.visibility = GONE
+        }
+    }
+
+    //set listeners
     fun setListeners() {
-
+        mRetryButton.setOnClickListener({
+            onRetry()
+        })
     }
 
 
-    fun setObservers() {
-
+    //on retry button click
+    fun onRetry() {
+        fetchRepoListData()
     }
 
     fun fetchRepoListData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mViewModel.getRepoListData().observe(viewLifecycleOwner, { it ->
-
+                    mRepoAdapter.setDataList(it)
                 })
             }
         }

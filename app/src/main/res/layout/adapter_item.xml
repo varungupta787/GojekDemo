@@ -71,7 +71,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textViewLanguage"
+                android:id="@+id/tv_language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
@@ -86,7 +86,7 @@
                 android:src="@mipmap/star_yellow_16" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textViewWatcherCount"
+                android:id="@+id/tv_watcher_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="134" />
@@ -100,7 +100,7 @@
                 android:src="@mipmap/fork_black_16" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textViewForkCount"
+                android:id="@+id/tv_fork_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="5452++" />

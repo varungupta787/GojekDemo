@@ -5,11 +5,11 @@ import android.os.Parcelable
 
 class Owner() : Parcelable {
     var id: Int? = null
-    var html_url: String? = null
+    var login: String? = null
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readValue(Int::class.java.classLoader) as? Int
-        html_url = parcel.readString()
+        login = parcel.readString()
     }
 
     override fun describeContents(): Int {
