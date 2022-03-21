@@ -1,14 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.RepositoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        <include layout="@layout/shimmer_placeholder_layout" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/repo_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+    <RelativeLayout
+        android:id="@+id/error_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/no_internet_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/nointernet_connection"/>
+
+        <TextView
+            android:id="@+id/error_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/error_msg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_below="@+id/no_internet_image"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/error_desciption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/error_desciption_msg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_below="@+id/error_msg"
+            android:textColor="@color/colorGrey_dark"
+            android:textStyle="bold"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/retry_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/retry"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:background="@drawable/round_corner_rectangle"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textStyle="bold"
+            android:textColor="@color/holo_green_light"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_20"/>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

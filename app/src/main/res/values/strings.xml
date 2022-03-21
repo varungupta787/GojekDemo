@@ -2,4 +2,7 @@
     <string name="app_name">GojekDemo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_desciption_msg">An Alien is probably blocking your signal.</string>
+    <string name="error_msg">SomeThing went wrong..</string>
+    <string name="retry">Retry</string>
 </resources>
