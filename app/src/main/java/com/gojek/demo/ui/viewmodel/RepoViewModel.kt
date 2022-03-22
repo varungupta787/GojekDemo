@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RepoViewModel @Inject constructor(
-    @AppModule.MainDispatcher var mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    var repoUseCase: RepoDataUsecase
+    @AppModule.MainDispatcher var mainDispatcher: CoroutineDispatcher =
+    Dispatchers.Main, var repoUseCase: RepoDataUsecase
 ) :
     BaseViewModel() {
     fun getRepoListData(): SingleLiveEvent<List<RepoItem>> {

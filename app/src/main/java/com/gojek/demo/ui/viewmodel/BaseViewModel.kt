@@ -1,6 +1,5 @@
 package com.gojek.demo.ui.viewmodel
 
-import androidx.constraintlayout.motion.utils.ViewState
 import androidx.lifecycle.ViewModel
 import com.gojek.demo.ui.SingleLiveEvent
 

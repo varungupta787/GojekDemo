@@ -1,7 +1,6 @@
 package com.gojek.demo.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -9,10 +8,9 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -79,6 +77,7 @@ class RepositoryFragment : Fragment() {
 
     @Inject
     lateinit var mViewModel: RepoViewModel
+
     @Inject
     lateinit var mRepoAdapter: RepoListAdapter
 
@@ -116,21 +115,19 @@ class RepositoryFragment : Fragment() {
     //obser the loading state during and ater api call to handle the views
     fun observeLoadingState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mViewModel.observeViewStateLiveData().observe(viewLifecycleOwner, { it ->
-                    when(it) {
-                        BaseViewModel.ViewStateType.SUCCESS -> {
-                            hideLoading(true)
-                        }
-                        BaseViewModel.ViewStateType.ERROR -> {
-                            hideLoading(false)
-                        }
-                        BaseViewModel.ViewStateType.LOADING -> {
-                            showLoading()
-                        }
+            mViewModel.observeViewStateLiveData().observe(viewLifecycleOwner, { it ->
+                when (it) {
+                    BaseViewModel.ViewStateType.SUCCESS -> {
+                        hideLoading(true)
                     }
-                })
-            }
+                    BaseViewModel.ViewStateType.ERROR -> {
+                        hideLoading(false)
+                    }
+                    BaseViewModel.ViewStateType.LOADING -> {
+                        showLoading()
+                    }
+                }
+            })
         }
     }
 
@@ -179,11 +176,10 @@ class RepositoryFragment : Fragment() {
 
     fun fetchRepoListData() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mViewModel.getRepoListData().observe(viewLifecycleOwner, { it ->
-                    mRepoAdapter.setDataList(it)
-                })
-            }
+            mViewModel.getRepoListData().observe(viewLifecycleOwner, { it ->
+                mRepoAdapter.setDataList(it)
+                mRepoAdapter.notifyDataSetChanged()
+            })
         }
     }
 }

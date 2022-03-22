@@ -3,15 +3,16 @@ package com.gojek.demo.data.model
 import android.os.Parcel
 import android.os.Parcelable
 
-class RepoItem() : Parcelable{
-    var id: Int? = null
-    var forks_count: Int? = null
-    var language: String? = null
-    var watchers_count: String? = null
-    var html_url: String? = null
-    var avatar_url: String? = null
-    var description: String? = null
+data class RepoItem(
+    var id: Int? = null,
+    var forks_count: Int? = null,
+    var language: String? = null,
+    var watchers_count: String? = null,
+    var html_url: String? = null,
+    var avatar_url: String? = null,
+    var description: String? = null,
     var owner: Owner? = null
+) : Parcelable {
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readValue(Int::class.java.classLoader) as? Int

@@ -10,7 +10,7 @@ import java.lang.Exception
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-open class BaseRepository @Inject constructor(@AppModule.IoDispatcher var networkDispatcher: CoroutineDispatcher) {
+open class BaseRepository constructor(var networkDispatcher: CoroutineDispatcher) {
 
     suspend fun <T> doNetworkCall(networkCall: suspend () -> Response<T>): NetworkResponseWrapper<T> {
         val networkResponse: NetworkResponseWrapper<T>

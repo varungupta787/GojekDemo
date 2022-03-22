@@ -12,8 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RepoDataUsecase  @Inject constructor(
-    @AppModule.IoDispatcher var dispatcher : CoroutineDispatcher = Dispatchers.IO,
+class RepoDataUsecase  constructor(
+    var dispatcher : CoroutineDispatcher = Dispatchers.IO,
     var repository: RepositoryDataRepo,
     var database: RepositoryDatabase,
 ) :
@@ -44,7 +44,7 @@ class RepoDataUsecase  @Inject constructor(
     }
 
     fun getRepoDataFromDatabase(onSuccess: (t: List<RepoItem>) -> Unit) {
-        onSuccess(database.repoItemDao().getAllRepositoryItem())
+        onSuccess(convertDataToRepoItemList(database.repoItemDao().getAllRepositoryItem()))
     }
 
 }

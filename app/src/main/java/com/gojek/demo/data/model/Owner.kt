@@ -3,12 +3,9 @@ package com.gojek.demo.data.model
 import android.os.Parcel
 import android.os.Parcelable
 
-class Owner() : Parcelable {
-    var id: Int? = null
-    var login: String? = null
+data class Owner(var login: String? = null) : Parcelable {
 
     constructor(parcel: Parcel) : this() {
-        id = parcel.readValue(Int::class.java.classLoader) as? Int
         login = parcel.readString()
     }
 

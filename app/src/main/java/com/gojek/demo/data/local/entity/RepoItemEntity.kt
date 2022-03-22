@@ -8,7 +8,7 @@ import com.gojek.demo.data.model.Owner
 
 @Entity
 data class RepoItemEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Int?,
     @ColumnInfo(name = "forks_count") val forks_count: Int?,
     @ColumnInfo(name = "language") val language: String?,
     @ColumnInfo(name = "watchers_count") val watchers_count: String?,
