@@ -11,9 +11,12 @@ import com.bumptech.glide.Glide
 import com.gojek.demo.R
 import com.gojek.demo.data.model.RepoItem
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
-class RepoListAdapter @Inject constructor(@ActivityContext var context: Context) : RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>() {
+@ActivityScoped
+class RepoListAdapter @Inject constructor(@ActivityContext var context: Context)
+    : RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>() {
 
     var mRepoList:List<RepoItem>? = null
 
@@ -34,11 +37,11 @@ class RepoListAdapter @Inject constructor(@ActivityContext var context: Context)
                     view.html_url.text = html_url
                     view.tv_language.text = language
                     view.tv_fork_count.text = forks_count.toString()
-                    view.tv_watcher_count.text = watchers_count
+                    view.tv_watcher_count.text = watchers_count.toString()
 
                     //Load image for avatar
                     Glide.with(context)
-                        .load(avatar_url)
+                        .load(owner?.avatar_url)
                         .into(view.imageViewAvatar);
                 }
         }
@@ -50,6 +53,7 @@ class RepoListAdapter @Inject constructor(@ActivityContext var context: Context)
 
     fun setDataList(repoList: List<RepoItem>) {
         mRepoList = repoList
+        notifyDataSetChanged()
     }
 
     class RepoViewHolder(view: View) : RecyclerView.ViewHolder(view) {

@@ -2,13 +2,10 @@ package com.gojek.demo.domain.repository
 
 import com.gojek.demo.data.NetworkUtils
 import com.gojek.demo.data.model.NetworkResponseWrapper
-import com.gojek.demo.di.AppModule
 import com.gojek.demo.domain.models.ResponseResource
 import kotlinx.coroutines.CoroutineDispatcher
-import retrofit2.Response
-import java.lang.Exception
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import retrofit2.Response
 
 open class BaseRepository constructor(var networkDispatcher: CoroutineDispatcher) {
 

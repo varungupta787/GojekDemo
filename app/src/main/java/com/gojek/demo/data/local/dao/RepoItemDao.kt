@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.gojek.demo.data.local.entity.RepoItemEntity
-import com.gojek.demo.data.model.RepoItem
 
 @Dao
 interface RepoItemDao {
@@ -14,5 +13,8 @@ interface RepoItemDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllRepositoryItems(repoItemEntity: List<RepoItemEntity>)
+
+    @Query("DELETE FROM RepoItemEntity")
+    fun deleteAllRepositoryItems()
 
 }

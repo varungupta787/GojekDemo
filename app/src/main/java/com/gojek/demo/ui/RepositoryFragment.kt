@@ -7,9 +7,13 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +23,7 @@ import com.gojek.demo.ui.adapter.RepoListAdapter
 import com.gojek.demo.ui.viewmodel.BaseViewModel
 import com.gojek.demo.ui.viewmodel.RepoViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,15 +59,15 @@ class RepositoryFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_repository, container, false)
     }
 
-    companion object {
-        /**
+  /*  companion object {
+        *//**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
          * @return A new instance of fragment RepositoryFragment.
-         */
+         *//*
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -72,24 +77,23 @@ class RepositoryFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
+    }*/
 
-
-    @Inject
-    lateinit var mViewModel: RepoViewModel
+  val mViewModel: RepoViewModel by activityViewModels()
 
     @Inject
     lateinit var mRepoAdapter: RepoListAdapter
 
     lateinit var mShimmerLayout: ShimmerFrameLayout
     lateinit var mRepoRecyclerview: RecyclerView
-    lateinit var mErrorContainer: LinearLayout
+    lateinit var mErrorContainer: RelativeLayout
     lateinit var mRetryButton: AppCompatButton
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
+        setAdapter()
         setListeners()
         observeLoadingState()
         // get the api data
@@ -134,10 +138,12 @@ class RepositoryFragment : Fragment() {
     //stop the shimmer animation
     fun stopShimmerEffect() {
         mShimmerLayout.stopShimmerAnimation()
+        mShimmerLayout.visibility = GONE
     }
 
     //show the shimmer animation
     fun showShimmerEffect() {
+        mShimmerLayout.visibility = VISIBLE
         mShimmerLayout.startShimmerAnimation()
     }
 
@@ -145,7 +151,7 @@ class RepositoryFragment : Fragment() {
     fun showLoading() {
         showShimmerEffect()
         mRepoRecyclerview.visibility = GONE
-        mRetryButton.visibility = GONE
+        mErrorContainer.visibility = GONE
     }
 
 
@@ -153,10 +159,10 @@ class RepositoryFragment : Fragment() {
     fun hideLoading(isSucces: Boolean) {
         stopShimmerEffect()
         if (isSucces) {
-            mRetryButton.visibility = GONE
+            mErrorContainer.visibility = GONE
             mRepoRecyclerview.visibility = VISIBLE
         } else {
-            mRetryButton.visibility = VISIBLE
+            mErrorContainer.visibility = VISIBLE
             mRepoRecyclerview.visibility = GONE
         }
     }
@@ -178,7 +184,6 @@ class RepositoryFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             mViewModel.getRepoListData().observe(viewLifecycleOwner, { it ->
                 mRepoAdapter.setDataList(it)
-                mRepoAdapter.notifyDataSetChanged()
             })
         }
     }

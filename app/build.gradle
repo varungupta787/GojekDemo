@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -21,20 +22,12 @@ android {
                 arguments += ["room.incremental" : "true"]
             }
         }
-    }
 
-    android {
-        sourceSets {
-            String sharedTestDir = 'src/sharedTest/java'
-            test {
-                java.srcDirs += sharedTestDir
-            }
-            androidTest {
-                java.srcDirs += sharedTestDir
-            }
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
         }
     }
-
     buildTypes {
         debug {
             minifyEnabled false
@@ -85,6 +78,7 @@ android {
 }
 
 kapt {
+    correctErrorTypes = true
     arguments {
         // Make Hilt share the same definition of Components in tests instead of
         // creating a new set of Components per test class.
@@ -181,5 +175,6 @@ dependencies {
 
     implementation "com.facebook.shimmer:shimmer:0.1.0@aar"
     implementation "com.github.bumptech.glide:glide:4.4.0"
-    implementation "com.squareup.retrofit2:retrofit:2.4.0"
+    implementation "com.squareup.retrofit2:retrofit:2.6.2"
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
 }

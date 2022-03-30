@@ -9,7 +9,7 @@ import dagger.hilt.android.qualifiers.ActivityContext
 
 object NetworkUtils {
     const val BASE_URL = "https://api.github.com/"
-    const val REPO_URL = "repos/octocat/hello-world"
+    const val REPO_URL = "orgs/Octokit/repos"
 
     //Http Status Codes
     const val SESSION_EXPIRED = 401

@@ -11,18 +11,25 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 open class BaseUseCase constructor(
-    @AppModule.IoDispatcher var databaseDispatcher: CoroutineDispatcher,
+    var databaseDispatcher: CoroutineDispatcher,
     var repo: RepositoryDataRepo,
     var db: RepositoryDatabase
 ) {
 
-    fun saveToDatabase(repoDataList: List<RepoItem>) {
-        CoroutineScope(databaseDispatcher).launch {
-            db.repoItemDao().insertAllRepositoryItems(convertDataToRepoEntityList(repoDataList))
-        }
+    suspend fun saveToDatabase(repoDataList: List<RepoItem>) {
+        withContext(databaseDispatcher) { deleteAllPreviousData() }
+        withContext(databaseDispatcher) { saveNewData(repoDataList) }
     }
 
-    fun convertDataToRepoEntityList(repoDataList: List<RepoItem>): List<RepoItemEntity> {
+    suspend fun deleteAllPreviousData() {
+        db.repoItemDao().deleteAllRepositoryItems()
+    }
+
+    suspend fun saveNewData(repoDataList: List<RepoItem>) {
+        db.repoItemDao().insertAllRepositoryItems(convertDataToRepoEntityList(repoDataList))
+    }
+
+    suspend fun convertDataToRepoEntityList(repoDataList: List<RepoItem>): List<RepoItemEntity> {
         val entityList: ArrayList<RepoItemEntity> = ArrayList()
         repoDataList.forEach { it ->
             entityList.add(
@@ -32,7 +39,7 @@ open class BaseUseCase constructor(
                     it.language,
                     it.watchers_count,
                     it.html_url,
-                    it.avatar_url,
+                    it.forks_url,
                     it.description,
                     it.owner
                 )
@@ -51,7 +58,7 @@ open class BaseUseCase constructor(
                     it.language,
                     it.watchers_count,
                     it.html_url,
-                    it.avatar_url,
+                    it.forks_url,
                     it.description,
                     it.owner
                 )

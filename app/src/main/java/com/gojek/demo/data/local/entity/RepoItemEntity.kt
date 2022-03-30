@@ -11,9 +11,9 @@ data class RepoItemEntity(
     @PrimaryKey val id: Int?,
     @ColumnInfo(name = "forks_count") val forks_count: Int?,
     @ColumnInfo(name = "language") val language: String?,
-    @ColumnInfo(name = "watchers_count") val watchers_count: String?,
+    @ColumnInfo(name = "watchers_count") val watchers_count: Int?,
     @ColumnInfo(name = "html_url") val html_url: String?,
-    @ColumnInfo(name = "avatar_url") val avatar_url: String?,
+    @ColumnInfo(name = "forks_url") val forks_url: String?,
     @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo(name = "owner") val owner: Owner?
 )

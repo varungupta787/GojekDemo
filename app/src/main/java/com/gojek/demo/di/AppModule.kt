@@ -1,30 +1,24 @@
 package com.gojek.demo.di
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
 import androidx.room.Room
-import com.gojek.demo.data.NetworkConnectionUtil
 import com.gojek.demo.data.NetworkUtils
 import com.gojek.demo.data.local.database.DatabaseUtil
 import com.gojek.demo.data.local.database.RepositoryDatabase
-import com.gojek.demo.data.local.database.TypeConverterHelper
 import com.gojek.demo.data.remote.ApiService
 import com.gojek.demo.data.repositories.RepositoryRepoDataImpl
 import com.gojek.demo.domain.RepositoryDataRepo
-import com.gojek.demo.domain.usercase.RepoDataUsecase
-import com.gojek.demo.ui.viewmodel.BaseViewModel
-import com.gojek.demo.ui.viewmodel.RepoViewModel
-import com.gojek.demo.ui.viewmodel.ViewModelFactory
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -34,18 +28,14 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideApiService(): ApiService {
-        return Retrofit.Builder()
-            .baseUrl(NetworkUtils.BASE_URL)
+        val okHttpBuilder = OkHttpClient.Builder()
+        val client = Retrofit.Builder().client(okHttpBuilder.build())
+
+        return client.baseUrl(NetworkUtils.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
     }
-
-    @Singleton
-    @Provides
-    fun provideNetworkConnectionUtil(@ActivityContext context:Context) : NetworkConnectionUtil {
-        return NetworkConnectionUtil(context)
-    }
-
 }
 
 
@@ -64,12 +54,12 @@ object AppModule {
     @Singleton
     @IoDispatcher
     @Provides
-    fun provideIoDispatcher() : CoroutineDispatcher = Dispatchers.IO
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Singleton
     @MainDispatcher
     @Provides
-    fun provideMainDispatcher() : CoroutineDispatcher= Dispatchers.Main
+    fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Singleton
     @Provides
@@ -81,50 +71,13 @@ object AppModule {
         ).build()
     }
 
-    @Singleton
-    @Provides
-    fun provideRepoDataUsecase(
-        @IoDispatcher dispatcher: CoroutineDispatcher,
-        repositoryDataRepo: RepositoryDataRepo,
-        repositoryDatabase: RepositoryDatabase,
-    ): RepoDataUsecase {
-        return RepoDataUsecase(dispatcher, repositoryDataRepo, repositoryDatabase)
-    }
-
-    @Singleton
-    @Provides
-    fun provideRepositoryRepoDataImpl(
-        apiService: ApiService,
-        @IoDispatcher dispatcher: CoroutineDispatcher
-    ): RepositoryDataRepo {
-        return RepositoryRepoDataImpl(apiService, dispatcher)
-    }
-
-/*    @Singleton
-    @Provides
-    fun provideRepoViewModel(
-        @AppModule.MainDispatcher mainDispatcher: CoroutineDispatcher,
-        repoUseCase: RepoDataUsecase
-    ): RepoViewModel {
-        return RepoViewModel(mainDispatcher, repoUseCase)
-    }*/
-/*    @Singleton
-    @Provides
-    fun provideRepoViewModel(
-    @ActivityContext context:Context,
-        @AppModule.MainDispatcher mainDispatcher: CoroutineDispatcher,
-        repoUseCase: RepoDataUsecase
-    ): RepoViewModel {
-        return  ViewModelProviders.of(context as AppCompatActivity, ViewModelFactory(mainDispatcher, repoUseCase)).get(RepoViewModel::class.java)
-}*/
-
 }
 
-/*
-@InstallIn(ActivityComponent::class)
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+    @Singleton
     @Binds
     abstract fun bindRepository(impl: RepositoryRepoDataImpl): RepositoryDataRepo
 
-}*/
+}
