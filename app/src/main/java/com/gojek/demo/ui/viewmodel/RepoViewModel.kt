@@ -20,8 +20,10 @@ class RepoViewModel  @Inject constructor(
     @AppModule.MainDispatcher var mainDispatcher: CoroutineDispatcher,
     var repoUseCase: RepoDataUsecase)
  : BaseViewModel() {
-    suspend fun getRepoListData(): SingleLiveEvent<List<RepoItem>> {
-        val dataEvent = SingleLiveEvent<List<RepoItem>>()
+
+    private val dataEvent = SingleLiveEvent<List<RepoItem>>()
+
+    suspend fun getRepoListData() {
         viewStateLiveData.setValue(ViewStateType.LOADING)
         viewModelScope.launch(mainDispatcher) {
             repoUseCase.getRepoData({
@@ -31,6 +33,7 @@ class RepoViewModel  @Inject constructor(
                 viewStateLiveData.postValue(ViewStateType.ERROR)
             })
         }
-        return dataEvent
     }
+
+    fun getDataEvent() = dataEvent
 }

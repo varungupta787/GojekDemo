@@ -182,7 +182,7 @@ class RepositoryFragment : Fragment() {
 
     fun fetchRepoListData() {
         viewLifecycleOwner.lifecycleScope.launch {
-            mViewModel.getRepoListData().observe(viewLifecycleOwner, { it ->
+            mViewModel.getDataEvent().observe(viewLifecycleOwner, { it ->
                 mRepoAdapter.setDataList(it)
             })
         }
