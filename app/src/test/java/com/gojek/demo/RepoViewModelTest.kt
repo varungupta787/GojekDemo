@@ -103,6 +103,9 @@ class RepoViewModelTest {
         assertNotNull(repoViewModel.observeViewStateLiveData().value)
         assert(repoViewModel.observeViewStateLiveData().value == BaseViewModel.ViewStateType.ERROR)
         coVerify() { repoUsecase.getRepoData(any(), any()) }
+
+        repoViewModel.observeViewStateLiveData().removeObserver {  }
+        repoViewModel.getDataEvent().removeObserver {  }
     }
 
     @After
