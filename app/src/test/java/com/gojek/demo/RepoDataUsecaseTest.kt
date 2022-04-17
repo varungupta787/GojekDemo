@@ -101,4 +101,48 @@ class RepoDataUsecaseTest {
         repoDataUsecase.getRepoData(onSuccess = success , onError = error)
         coVerify { error.invoke("ERROR_MSG") }
     }
+
+    @Test
+    fun getRepoDataForNoInternetAvailableTest() = runBlockingTest {
+        every { testNetworkConnectionUtil.isNetworkAvailable() } returns false
+
+        val owner1 = Owner("testLogin1", "www.test1.com")
+        val owner2 = Owner("testLogin2", "www.test2.com")
+        val entity1 = RepoItemEntity(1, 11, "", 111, "", "", "", owner1)
+        val entity2 = RepoItemEntity(2, 22, "", 222, "", "", "", owner2)
+        val repoItemList = repoDataUsecase.convertDataToRepoItemList(listOf(entity1, entity2))
+
+        val success = mockk<(List<RepoItem>) -> Unit>()
+        val error = mockk<(t: String?) -> Unit>()
+
+        every { repositoryDatabase.repoItemDao().getAllRepositoryItem() } returns listOf()
+        every { success.invoke(listOf()) } answers { repoItemList }
+
+        repoDataUsecase.getRepoData(onSuccess = success , onError = error)
+
+    }
+
+    @Test
+    fun getConvertDataToRepoEntityListTest() = runBlockingTest {
+        val owner = Owner("testLogin", "www.test.com")
+        val repoItem1 = RepoItem(1, any(), any(), any(), any(), any(), any(), owner)
+        val repoItem2 = RepoItem(2, anyInt(), anyString(), anyInt(), anyString(), anyString(), anyString(), any())
+        val repoList = listOf(repoItem1, repoItem2)
+
+        val repoItemList = repoDataUsecase.convertDataToRepoEntityList(repoList)
+        assertEquals(2, repoItemList.size)
+        assertEquals(2, repoItemList.get(1).id)
+    }
+
+    @Test
+    fun getconvertDataToRepoItemListTest() = runBlockingTest {
+        val owner1 = Owner("testLogin1", "www.test1.com")
+        val owner2 = Owner("testLogin2", "www.test2.com")
+        val entity1 = RepoItemEntity(1, 11, "", 111, "", "", "", owner1)
+        val entity2 = RepoItemEntity(2, 22, "", 222, "", "", "", owner2)
+
+        val repoItemList = repoDataUsecase.convertDataToRepoItemList(listOf(entity1, entity2))
+        assertEquals(2, repoItemList.size)
+        assertEquals(2, repoItemList.get(1).id)
+    }
 }
