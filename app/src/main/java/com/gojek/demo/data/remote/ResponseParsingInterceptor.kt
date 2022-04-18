@@ -11,7 +11,6 @@ class ResponseParsingInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val response: Response = chain.proceed(chain.request())
         val responseString: String = response.body()?.string() ?: ""
-        Log.d("VARUN", "VARUN response : "+ responseString)
         val newResponse = response.newBuilder()
         var contentType = response.header("Content-Type")
         if (TextUtils.isEmpty(contentType))
