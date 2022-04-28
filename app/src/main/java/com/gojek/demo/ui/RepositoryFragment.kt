@@ -98,6 +98,7 @@ class RepositoryFragment : Fragment() {
         observeLoadingState()
         // get the api data
         fetchRepoListData()
+        observeRepoListData()
     }
 
     //Initialize the views
@@ -180,11 +181,15 @@ class RepositoryFragment : Fragment() {
         fetchRepoListData()
     }
 
+    fun observeRepoListData() {
+        mViewModel.getDataEvent().observe(viewLifecycleOwner, { it ->
+            mRepoAdapter.setDataList(it)
+        })
+    }
+
     fun fetchRepoListData() {
         viewLifecycleOwner.lifecycleScope.launch {
-            mViewModel.getDataEvent().observe(viewLifecycleOwner, { it ->
-                mRepoAdapter.setDataList(it)
-            })
+            mViewModel.getRepoListData()
         }
     }
 }
