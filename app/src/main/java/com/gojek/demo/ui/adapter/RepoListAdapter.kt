@@ -3,9 +3,12 @@ package com.gojek.demo.ui.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gojek.demo.R
@@ -43,7 +46,21 @@ class RepoListAdapter @Inject constructor(@ActivityContext var context: Context)
                     Glide.with(context)
                         .load(owner?.avatar_url)
                         .into(view.imageViewAvatar);
+
+                    view.itemView.setOnClickListener(View.OnClickListener {
+                        toggleDetailsView(holder)
+                    })
                 }
+        }
+    }
+
+    fun toggleDetailsView(holder: RepoViewHolder) {
+        holder.run {
+            if(repo_detail_container.isVisible) {
+                repo_detail_container.visibility = View.GONE
+            } else {
+                repo_detail_container.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -64,6 +81,7 @@ class RepoListAdapter @Inject constructor(@ActivityContext var context: Context)
         val tv_language: AppCompatTextView
         val tv_fork_count: AppCompatTextView
         val tv_watcher_count: AppCompatTextView
+        val repo_detail_container: LinearLayout
 
         init {
             imageViewAvatar = view.findViewById(R.id.imageViewAvatar)
@@ -73,6 +91,7 @@ class RepoListAdapter @Inject constructor(@ActivityContext var context: Context)
             tv_language = view.findViewById(R.id.tv_language)
             tv_fork_count = view.findViewById(R.id.tv_fork_count)
             tv_watcher_count = view.findViewById(R.id.tv_watcher_count)
+            repo_detail_container = view.findViewById(R.id.repo_detail_container)
         }
     }
 
