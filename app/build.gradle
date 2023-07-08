@@ -61,10 +61,6 @@ android {
         enabledForTests = true
     }
 
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
 
     kotlinOptions {
         jvmTarget = "1.8"
@@ -181,4 +177,6 @@ dependencies {
 
     testImplementation "io.mockk:mockk:1.9.3"
     androidTestImplementation "io.mockk:mockk-android:1.9.3"
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
 }

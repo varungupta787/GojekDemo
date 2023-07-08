@@ -5,38 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.RepositoryFragment">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        tools:visibility="visible"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        <include layout="@layout/shimmer_placeholder_layout" />
-        </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/repo_recyclerview"
